@@ -89,7 +89,8 @@ public class PropertiesConfiguration extends EventSource {
 		_profile = profile;
 		_modules = "";
 		
-		connectServer(_host, _port, _projCode, _profile, _modules);
+		connectServer(getHost(), getPort(), getProjCode(), getProfile(), getModules());
+//		connectServer(_host, _port, _projCode, _profile, _modules);
 		substitutor = new StrSubstitutor(createInterpolator());
 	}
 	
@@ -106,7 +107,8 @@ public class PropertiesConfiguration extends EventSource {
 		_profile = profile;
 		_modules = modules;
 		
-		connectServer(_host, _port, _projCode, _profile, _modules);
+		connectServer(getHost(), getPort(), getProjCode(), getProfile(), getModules());
+//		connectServer(_host, _port, _projCode, _profile, _modules);
 		substitutor = new StrSubstitutor(createInterpolator());
 	}
 
@@ -117,7 +119,8 @@ public class PropertiesConfiguration extends EventSource {
 		_profile = profile;
 		_modules = "";
 		
-		connectServer(_host, _port, _projCode, _profile, _modules);
+		connectServer(getHost(), getPort(), getProjCode(), getProfile(), getModules());
+//		connectServer(_host, _port, _projCode, _profile, _modules);
 		substitutor = new StrSubstitutor(createInterpolator());
 	}
 	
@@ -128,11 +131,12 @@ public class PropertiesConfiguration extends EventSource {
 		_profile = profile;
 		_modules = modules;
 		
-		connectServer(_host, _port, _projCode, _profile, _modules);
+		connectServer(getHost(), getPort(), getProjCode(), getProfile(), getModules());
+//		connectServer(_host, _port, _projCode, _profile, _modules);
 		substitutor = new StrSubstitutor(createInterpolator());
 	}
 	
-	protected void connectServer(String host, int port, final String projCode, final String profile, final String modules) {
+	protected void connectServer(String host, int port, final String projCode, final String profile, final String modules) {	
 		Assert.notNull(projCode, "连接superdiamond， projCode不能为空");
 		
 		final String clientMsg = "superdiamond={\"projCode\": \"" + projCode + "\", \"profile\": \"" + profile + "\", "
@@ -253,62 +257,71 @@ public class PropertiesConfiguration extends EventSource {
 	}
 	
 	public static String getProjCode() {
-		if(StringUtils.isNotBlank(_projCode))
+//		if(StringUtils.isNotBlank(_projCode))
+//			return _projCode;
+		
+//		_projCode = System.getenv("SUPERDIAMOND_PROJCODE");
+		if(StringUtils.isNotBlank(System.getenv("SUPERDIAMOND_PROJCODE"))) 
+			return System.getenv("SUPERDIAMOND_PROJCODE");
+		else if(StringUtils.isNotBlank(System.getProperty("superdiamond.projcode")))
+			return System.getProperty("superdiamond.projcode");
+		else
 			return _projCode;
 		
-		_projCode = System.getenv("SUPERDIAMOND_PROJCODE");
-		if(StringUtils.isBlank(_projCode)) {
-			return System.getProperty("superdiamond.projcode");
-		} else {
-			return _projCode;
-		}
 	}
 	
 	public static String getProfile() {
-		if(StringUtils.isNotBlank(_profile))
+//		if(StringUtils.isNotBlank(_profile))
+//			return _profile;
+		
+//		_profile = System.getenv("SUPERDIAMOND_PROFILE");
+		if(StringUtils.isNotBlank(System.getenv("SUPERDIAMOND_PROFILE"))) 
+			return System.getenv("SUPERDIAMOND_PROFILE");
+		else if(StringUtils.isNotBlank(System.getProperty("superdiamond.profile")))
+			return System.getProperty("superdiamond.profile", "development");
+		else
 			return _profile;
 		
-		_profile = System.getenv("SUPERDIAMOND_PROFILE");
-		if(StringUtils.isBlank(_profile)) {
-			return System.getProperty("superdiamond.profile", "development");
-		} else {
-			return _profile;
-		}
 	}
 	
 	public static String getModules() {
-		if(StringUtils.isNotBlank(_modules))
+//		if(StringUtils.isNotBlank(_modules))
+//			return _modules;
+		
+//		_modules = System.getenv("SUPERDIAMOND_MODULES");
+		if(StringUtils.isNotBlank(System.getenv("SUPERDIAMOND_MODULES"))) 
+			return System.getenv("SUPERDIAMOND_MODULES");
+		else if(StringUtils.isNotBlank(System.getProperty("superdiamond.modules")))
+			return System.getProperty("superdiamond.modules");
+		else
 			return _modules;
 		
-		_modules = System.getenv("SUPERDIAMOND_MODULES");
-		if(StringUtils.isBlank(_modules)) {
-			return System.getProperty("superdiamond.modules");
-		} else {
-			return _modules;
-		}
 	}
 	
 	public static String getHost() {
-		if(StringUtils.isNotBlank(_host))
+//		if(StringUtils.isNotBlank(_host))
+//			return _host;
+		
+//		_host = System.getenv("SUPERDIAMOND_HOST");
+		if(StringUtils.isNotBlank(System.getenv("SUPERDIAMOND_HOST"))) 
+			return System.getenv("SUPERDIAMOND_HOST");
+		else if(StringUtils.isNotBlank(System.getProperty("superdiamond.host")))
+			return System.getProperty("superdiamond.host", "udream.conf");
+		else 
 			return _host;
 		
-		_host = System.getenv("SUPERDIAMOND_HOST");
-		if(StringUtils.isBlank(_host)) {
-			return System.getProperty("superdiamond.host", "localhost");
-		} else {
-			return _host;
-		}
 	}
 	
 	public static int getPort() {
-		if(_port > 1)
-			return _port;
+//		if(_port > 1)
+//			return _port;
 			
-		if(StringUtils.isBlank(System.getenv("SUPERDIAMOND_PORT"))) {
+		if(StringUtils.isNotBlank(System.getenv("SUPERDIAMOND_PORT"))) 
+			 return Integer.valueOf(System.getenv("SUPERDIAMOND_PORT"));
+		else if(StringUtils.isNotBlank(System.getProperty("superdiamond.port")))
 			return Integer.valueOf(System.getProperty("superdiamond.port", "8283"));
-		} else {
-			return Integer.valueOf(System.getenv("SUPERDIAMOND_PORT"));
-		}
+		else 
+			return _port;
 	}
 	
 	// --------------------------------------------------------------------
